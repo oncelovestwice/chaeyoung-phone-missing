@@ -3,7 +3,7 @@
    不填则自动启用内置的趣味兜底短句回复
    ==================================================== */
 const AI_CONFIG = {
-    apiKey: "", // 例如 "sk-xxx"
+    apiKey: "sk-ws-H.YPYPPLL.BADr.MEYCIQD3l8P0i1spPtYfOw_RELF3I5q6Oi1lX_dpoOa7SL_-WwIhAKp760AByG77XUvNg1GMQTG0Wubfb337vmdz3mrZ4RXq", // 例如 "sk-xxx"
     apiUrl: "https://dashscope.aliyuncs.com/compatible-v1/chat/completions",
     modelName: "qwen-turbo"
 };
