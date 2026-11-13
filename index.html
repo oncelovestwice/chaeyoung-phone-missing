@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孙彩瑛的手机 - 互动体验版</title>
+    <!-- 引入外部样式表 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="phone-frame">
+    <!-- 灵动岛 -->
+    <div class="dynamic-island">
+        <span id="top-time">10:23</span>
+        <div class="island-camera"></div>
+    </div>
+
+    <!-- 屏幕容器 -->
+    <div class="screen" id="main-screen">
+        
+        <!-- 锁屏与随机密码解锁面板 -->
+        <div id="lock-screen">
+            <div style="text-align: center;">
+                <div class="lock-time" id="clock">10:23</div>
+                <div class="lock-date">孙彩瑛的加密手机</div>
+            </div>
+            
+            <div class="passcode-container">
+                <div style="font-size: 13px; margin-bottom: 12px; opacity: 0.9;">请输入 4 位随机解锁密码</div>
+                <div class="passcode-dots">
+                    <div class="dot" id="dot-0"></div>
+                    <div class="dot" id="dot-1"></div>
+                    <div class="dot" id="dot-2"></div>
+                    <div class="dot" id="dot-3"></div>
+                </div>
+                <div class="keypad">
+                    <button class="key-btn" onclick="pressKey('1')">1</button>
+                    <button class="key-btn" onclick="pressKey('2')">2</button>
+                    <button class="key-btn" onclick="pressKey('3')">3</button>
+                    <button class="key-btn" onclick="pressKey('4')">4</button>
+                    <button class="key-btn" onclick="pressKey('5')">5</button>
+                    <button class="key-btn" onclick="pressKey('6')">6</button>
+                    <button class="key-btn" onclick="pressKey('7')">7</button>
+                    <button class="key-btn" onclick="pressKey('8')">8</button>
+                    <button class="key-btn" onclick="pressKey('9')">9</button>
+                    <button class="key-btn" onclick="clearPasscode()" style="font-size: 14px;">清空</button>
+                    <button class="key-btn" onclick="pressKey('0')">0</button>
+                    <button class="key-btn" onclick="unlockDirect()" style="font-size: 12px; background: rgba(7,193,96,0.6);">免密体验</button>
+                </div>
+                <!-- 提示当前随机密码，方便你发给买家或自己测试 -->
+                <div class="password-tip" id="admin-secret-tip">🔐 当前随机密码加载中...</div>
+            </div>
+        </div>
+
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>TWICE 🍓</span>
+            <span>5G 🔋 98%</span>
+        </div>
+
+        <!-- 桌面九宫格 -->
+        <div class="home-screen">
+            <div class="app-icon" onclick="openApp('wechat-app')">
+                <div class="app-logo" style="background: #07c160; color: #fff;">💬<span class="badge">12</span></div>
+                <div class="app-name">微信</div>
+            </div>
+            <div class="app-icon" onclick="openApp('moments-app')">
+                <div class="app-logo" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">📸</div>
+                <div class="app-name">朋友圈</div>
+            </div>
+            <div class="app-icon" onclick="openApp('store-app')">
+                <div class="app-logo" style="background: #ff3b30; color:#fff;">🍓</div>
+                <div class="app-name">草莓商城</div>
+            </div>
+            <div class="app-icon" onclick="openApp('bank-app')">
+                <div class="app-logo" style="background: #ffcc00; color:#000;">💳</div>
+                <div class="app-name">BerryPay</div>
+            </div>
+            <div class="app-icon" onclick="openApp('gallery-app')">
+                <div class="app-logo" style="background: #5856d6; color:#fff;">🖼️</div>
+                <div class="app-name">相册</div>
+            </div>
+        </div>
+
+        <!-- ================= 微信 APP ================= -->
+        <div id="wechat-app" class="app-window">
+            <div class="app-header">
+                <button class="back-btn" onclick="closeApp('wechat-app')">〈 桌面</button>
+                <span>微信 (12)</span>
+                <span style="font-size:14px; color:#007aff;">+</span>
+            </div>
+            <div class="wechat-list" id="chat-list-container"></div>
+            <div id="chat-room-view" style="position: absolute; top: 50px; left: 0; width: 100%; height: calc(100% - 50px); display:none; flex-direction:column; background:#f5f5f7;">
+                <div class="app-header" style="background:#f7f7f7;">
+                    <button class="back-btn" onclick="closeChatRoom()">〈 微信</button>
+                    <span id="current-chat-title">聊天对象</span>
+                    <span>···</span>
+                </div>
+                <div class="msg-container" id="msg-box"></div>
+                <div class="chat-input-bar">
+                    <input type="text" id="chat-input" placeholder="给TA发消息..." onkeypress="handleKeyPress(event)">
+                    <button onclick="sendMessage()">发送</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 朋友圈 APP ================= -->
+        <div id="moments-app" class="app-window">
+            <div class="app-header">
+                <button class="back-btn" onclick="closeApp('moments-app')">〈 桌面</button>
+                <span>TWICE 朋友圈</span>
+                <span>📷</span>
+            </div>
+            <div style="flex:1; overflow-y:auto; background:#f4f4f4;" id="moments-container"></div>
+        </div>
+
+        <!-- ================= 草莓商城 APP ================= -->
+        <div id="store-app" class="app-window">
+            <div class="app-header">
+                <button class="back-btn" onclick="closeApp('store-app')">〈 桌面</button>
+                <span>彩瑛的草莓置办</span>
+                <span>🛒</span>
+            </div>
+            <div class="store-container">
+                <div class="product-card">
+                    <div class="product-info">
+                        <h4>🍓 锦山特级有机大草莓 (2斤)</h4>
+                        <p>售价：￥ 128.00</p>
+                    </div>
+                    <button class="buy-btn" onclick="buyItem('特级草莓', 128, 'Momo')">立即购买</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-info">
+                        <h4>💿 Somi Solo专辑《GAME PLAN》</h4>
+                        <p>售价：￥ 168.00</p>
+                    </div>
+                    <button class="buy-btn" onclick="buyItem('Somi专辑', 168, 'Somi')">立即购买</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-info">
+                        <h4>💿 Nayeon Solo专辑《NA》</h4>
+                        <p>售价：￥ 155.00</p>
+                    </div>
+                    <button class="buy-btn" onclick="buyItem('娜琏专辑', 155, '林娜琏')">立即购买</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-info">
+                        <h4>💿 MiSaMo 小分队专辑《Masterpiece》</h4>
+                        <p>售价：￥ 188.00</p>
+                    </div>
+                    <button class="buy-btn" onclick="buyItem('MiSaMo专辑', 188, 'Mina')">立即购买</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BerryPay 银行 APP ================= -->
+        <div id="bank-app" class="app-window">
+            <div class="app-header">
+                <button class="back-btn" onclick="closeApp('bank-app')">〈 桌面</button>
+                <span>BerryPay 钱包</span>
+                <span>🔒</span>
+            </div>
+            <div style="background:#f4f4f6; flex:1; overflow-y:auto;">
+                <div class="bank-card">
+                    <div style="font-size:14px; opacity:0.9;">孙彩瑛的招商银行储蓄卡 (尾号 0423)</div>
+                    <div class="bank-balance" id="bank-balance-display">￥ 3,450.00</div>
+                    <div style="margin-top:20px; font-size:12px; opacity:0.8;">可用额度 ￥50,000.00</div>
+                </div>
+                <div style="background:#fff; margin: 0 20px; border-radius:12px; padding:16px;">
+                    <h4 style="font-size:15px; margin-bottom:12px; color:#333;">近期账单</h4>
+                    <div style="display:flex; justify-content:space-between; font-size:14px; padding:8px 0; border-bottom:0.5px solid #eee;">
+                        <span>🛒 Olive Young 购物</span>
+                        <span style="color:#ff3b30;">- ￥ 45.00</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:14px; padding:8px 0; border-bottom:0.5px solid #eee;">
+                        <span>☕ 星巴克咖啡</span>
+                        <span style="color:#ff3b30;">- ￥ 32.00</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:14px; padding:8px 0;">
+                        <span>📥 演出劳务收入</span>
+                        <span style="color:#07c160;">+ ￥ 12,000.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 相册 APP ================= -->
+        <div id="gallery-app" class="app-window">
+            <div class="app-header">
+                <button class="back-btn" onclick="closeApp('gallery-app')">〈 桌面</button>
+                <span>彩瑛的相册</span>
+                <span>❤️</span>
+            </div>
+            <div class="gallery-grid">
+                <img class="gallery-item" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=300&auto=format&fit=crop">
+                <img class="gallery-item" src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=300&auto=format&fit=crop">
+                <img class="gallery-item" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300&auto=format&fit=crop">
+                <img class="gallery-item" src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=300&auto=format&fit=crop">
+                <img class="gallery-item" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=300&auto=format&fit=crop">
+                <img class="gallery-item" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=300&auto=format&fit=crop">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 引入外部逻辑脚本 -->
+<script src="script.js"></script>
+</body>
+</html>
